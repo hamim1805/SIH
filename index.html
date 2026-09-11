@@ -1,233 +1,306 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Interface</title>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        :root {
-            --bg-color: #f3f4f6;
-            --card-bg: #ffffff;
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --user-msg: #2563eb;
-            --bot-msg: #e5e7eb;
-            --text-dark: #1f2937;
-            --text-light: #6b7280;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .chat-card {
-            width: 100%;
-            max-width: 440px;
-            height: 600px;
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .chat-header {
-            padding: 16px 20px;
-            background: var(--card-bg);
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .chat-header h2 {
-            font-size: 1.1rem;
-            color: var(--text-dark);
-            font-weight: 600;
-        }
-
-        .chat-header p {
-            font-size: 0.8rem;
-            color: var(--text-light);
-        }
-
-        #chatbox {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .message {
-            max-width: 80%;
-            padding: 10px 14px;
-            border-radius: 16px;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            word-wrap: break-word;
-        }
-        .message.bot p { margin-bottom: 8px; }
-        .message.bot p:last-child { margin-bottom: 0; }
-        .message.bot ul, .message.bot ol { margin-left: 18px; margin-bottom: 8px; }
-        .message.bot code { background: #d1d5db; padding: 2px 4px; border-radius: 4px; font-family: monospace; }
-
-        .message.user {
-            align-self: flex-end;
-            background-color: var(--user-msg);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-
-        .message.bot {
-            align-self: flex-start;
-            background-color: var(--bot-msg);
-            color: var(--text-dark);
-            border-bottom-left-radius: 4px;
-        }
-
-        .input-area {
-            display: flex;
-            gap: 8px;
-            padding: 16px;
-            background: var(--card-bg);
-            border-top: 1px solid #f0f0f0;
-        }
-
-        .input-area input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 1px solid #e5e7eb;
-            border-radius: 24px;
-            outline: none;
-            font-size: 0.95rem;
-            transition: border-color 0.2s;
-        }
-
-        .input-area input:focus {
-            border-color: var(--primary);
-        }
-
-        .input-area button {
-            padding: 0 20px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 24px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .input-area button:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .typing-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 4px 0;
-        }
-
-        .typing-indicator span {
-            width: 6px;
-            height: 6px;
-            background: #6b7280;
-            border-radius: 50%;
-            animation: bounce 1.4s infinite ease-in-out both;
-        }
-
-        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
-        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
-
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-            40% { transform: scale(1); opacity: 1; }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wanderlust Travels | Book Flights, Hotels, Trains & Buses</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
 <body>
-
-    <div class="chat-card">
-        <div class="chat-header">
-            <h2>Tripsync's Chatbot</h2>
-            <p>Online</p>
-        </div>
-
-        <div id="chatbox"></div>
-
-        <div class="input-area">
-            <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off">
-            <button onclick="sendMessage()">Send</button>
-        </div>
+  <!-- ========== HEADER ========== -->
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#" class="logo">
+        <i class="fas fa-plane-departure"></i>
+        <span>Wanderlust</span>
+      </a>
+      <nav class="nav">
+        <a href="#home">Home</a>
+        <a href="#destinations">Destinations</a>
+        <a href="#offers">Offers</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <button class="btn btn-outline" id="loginBtn">Login</button>
+        <button class="btn btn-primary">Sign Up</button>
+        <button class="menu-toggle" id="menuToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
     </div>
+  </header>
 
-    <script>
-        const inputField = document.getElementById("userInput");
+  <!-- ========== HERO + SEARCH ========== -->
+  <section class="hero" id="home">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <h1>Explore the World with Ease</h1>
+      <p>Book flights, hotels, trains & buses at the best prices</p>
 
-        inputField.addEventListener("keypress", function(e) {
-            if (e.key === "Enter") {
-                sendMessage();
-            }
-        });
+      <!-- Search Box -->
+      <div class="search-box">
+        <!-- Tabs -->
+        <div class="search-tabs">
+          <button class="tab active" data-tab="flights">
+            <i class="fas fa-plane"></i> Flights
+          </button>
+          <button class="tab" data-tab="hotels">
+            <i class="fas fa-hotel"></i> Hotels
+          </button>
+          <button class="tab" data-tab="trains">
+            <i class="fas fa-train"></i> Trains
+          </button>
+          <button class="tab" data-tab="buses">
+            <i class="fas fa-bus"></i> Buses
+          </button>
+        </div>
 
-        async function sendMessage() {
-            const chatbox = document.getElementById("chatbox");
-            const userText = inputField.value.trim();
-            if (!userText) return;
+        <!-- Flight Form -->
+        <form class="search-form active" id="flights-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>From</label>
+              <input type="text" placeholder="City or Airport" required />
+            </div>
+            <div class="swap-btn" title="Swap">
+              <i class="fas fa-exchange-alt"></i>
+            </div>
+            <div class="form-group">
+              <label>To</label>
+              <input type="text" placeholder="City or Airport" required />
+            </div>
+            <div class="form-group">
+              <label>Departure</label>
+              <input type="date" required />
+            </div>
+            <div class="form-group">
+              <label>Return</label>
+              <input type="date" />
+            </div>
+            <div class="form-group">
+              <label>Travellers</label>
+              <select>
+                <option>1 Adult</option>
+                <option>2 Adults</option>
+                <option>3 Adults</option>
+                <option>Family</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-search">
+              <i class="fas fa-search"></i> Search Flights
+            </button>
+          </div>
+        </form>
 
-            const userMsgDiv = document.createElement("div");
-            userMsgDiv.className = "message user";
-            userMsgDiv.textContent = userText;
-            chatbox.appendChild(userMsgDiv);
+        <!-- Hotel Form -->
+        <form class="search-form" id="hotels-form">
+          <div class="form-row">
+            <div class="form-group wide">
+              <label>Destination / Hotel</label>
+              <input type="text" placeholder="City, landmark or hotel name" required />
+            </div>
+            <div class="form-group">
+              <label>Check-in</label>
+              <input type="date" required />
+            </div>
+            <div class="form-group">
+              <label>Check-out</label>
+              <input type="date" required />
+            </div>
+            <div class="form-group">
+              <label>Guests & Rooms</label>
+              <select>
+                <option>1 Room, 2 Guests</option>
+                <option>1 Room, 1 Guest</option>
+                <option>2 Rooms, 4 Guests</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-search">
+              <i class="fas fa-search"></i> Search Hotels
+            </button>
+          </div>
+        </form>
 
-            inputField.value = "";
-            inputField.disabled = true;
+        <!-- Train Form -->
+        <form class="search-form" id="trains-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>From Station</label>
+              <input type="text" placeholder="Departure station" required />
+            </div>
+            <div class="swap-btn"><i class="fas fa-exchange-alt"></i></div>
+            <div class="form-group">
+              <label>To Station</label>
+              <input type="text" placeholder="Arrival station" required />
+            </div>
+            <div class="form-group">
+              <label>Travel Date</label>
+              <input type="date" required />
+            </div>
+            <div class="form-group">
+              <label>Class</label>
+              <select>
+                <option>All Classes</option>
+                <option>Sleeper</option>
+                <option>AC 3 Tier</option>
+                <option>AC 2 Tier</option>
+                <option>First Class</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-search">
+              <i class="fas fa-search"></i> Search Trains
+            </button>
+          </div>
+        </form>
 
-  
-            const typingId = "typing-" + Date.now();
-            const botMsgDiv = document.createElement("div");
-            botMsgDiv.className = "message bot";
-            botMsgDiv.id = typingId;
-            botMsgDiv.innerHTML = `<span class="typing-indicator"><span></span><span></span><span></span></span>`;
-            chatbox.appendChild(botMsgDiv);
-            
-            chatbox.scrollTop = chatbox.scrollHeight;
+        <!-- Bus Form -->
+        <form class="search-form" id="buses-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>From</label>
+              <input type="text" placeholder="Departure city" required />
+            </div>
+            <div class="swap-btn"><i class="fas fa-exchange-alt"></i></div>
+            <div class="form-group">
+              <label>To</label>
+              <input type="text" placeholder="Arrival city" required />
+            </div>
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" required />
+            </div>
+            <div class="form-group">
+              <label>Passengers</label>
+              <select>
+                <option>1 Passenger</option>
+                <option>2 Passengers</option>
+                <option>3 Passengers</option>
+                <option>4+ Passengers</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-search">
+              <i class="fas fa-search"></i> Search Buses
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
 
-            try {
-                const response = await fetch("/chat", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ message: userText })
-                });
-                
-                if (!response.ok) throw new Error("Request failed");
-                
-                const data = await response.json();
-                
-                const parsedContent = marked.parse(data.response);
-                document.getElementById(typingId).innerHTML = parsedContent;
+  <!-- ========== POPULAR DESTINATIONS ========== -->
+  <section class="section destinations" id="destinations">
+    <div class="container">
+      <div class="section-header">
+        <h2>Popular Destinations</h2>
+        <p>Hand-picked places travellers love right now</p>
+      </div>
+      <div class="dest-grid">
+        <div class="dest-card">
+          <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80" alt="Paris" />
+          <div class="dest-info">
+            <h3>Paris, France</h3>
+            <p>From $450</p>
+            <span class="badge">Flights + Hotel</span>
+          </div>
+        </div>
+        <div class="dest-card">
+          <img src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=600&q=80" alt="Venice" />
+          <div class="dest-info">
+            <h3>Venice, Italy</h3>
+            <p>From $380</p>
+            <span class="badge">Flights + Hotel</span>
+          </div>
+        </div>
+        <div class="dest-card">
+          <img src="https://images.unsplash.com/photo-1548013146-72479768bada?w=600&q=80" alt="Bali" />
+          <div class="dest-info">
+            <h3>Bali, Indonesia</h3>
+            <p>From $520</p>
+            <span class="badge">Flights + Hotel</span>
+          </div>
+        </div>
+        <div class="dest-card">
+          <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&q=80" alt="Tokyo" />
+          <div class="dest-info">
+            <h3>Tokyo, Japan</h3>
+            <p>From $690</p>
+            <span class="badge">Flights + Hotel</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            } catch (err) {
-                document.getElementById(typingId).textContent = "Sorry, something went wrong.";
-            } finally {
-                inputField.disabled = false;
-                inputField.focus();
-                chatbox.scrollTop = chatbox.scrollHeight;
-            }
-        }
-    </script>
+  <!-- ========== WHY CHOOSE US ========== -->
+  <section class="section features" id="offers">
+    <div class="container">
+      <div class="section-header">
+        <h2>Why Book With Us?</h2>
+        <p>Everything you need for a smooth journey</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <i class="fas fa-tag"></i>
+          <h3>Best Price Guarantee</h3>
+          <p>We match or beat any competitor’s price on flights & hotels.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-headset"></i>
+          <h3>24/7 Support</h3>
+          <p>Our travel experts are available round the clock to help you.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-shield-alt"></i>
+          <h3>Secure Payments</h3>
+          <p>All transactions are encrypted and fully protected.</p>
+        </div>
+        <div class="feature-card">
+          <i class="fas fa-undo"></i>
+          <h3>Easy Cancellation</h3>
+          <p>Flexible policies so you can change plans without stress.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer" id="contact">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <h3><i class="fas fa-plane-departure"></i> Wanderlust</h3>
+        <p>Your trusted partner for flights, hotels, trains and buses worldwide.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <a href="#">About Us</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+        <a href="#">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="#">Help Center</a>
+        <a href="#">Contact Us</a>
+        <a href="#">Cancellation Policy</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <div class="socials">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Wanderlust Travels. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
